@@ -24,6 +24,7 @@
                 <div class="menu text-right">
                     <ul>
                         <li>Par Ardox</li>
+                        <li><a onclick="toggleLogin()">Login</a></li>
                     </ul>
                 </div>
 
@@ -32,9 +33,29 @@
         </section>
         <!-- Navbar Section Ends Here -->
 
+        <div id="loginPopup" class="popup">
+            <div class="popup-content">
+                <span class="close" onclick="toggleLogin()">&times;</span>
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <input type="text" id="username" placeholder="Username">
+                    <input type="password" id="password" placeholder="Password">
+                    <button type="button" onclick="submitLogin()">Login</button>
+                </form>
+            </div>
+        </div>
+
         <!-- fOOD MEnu Section Starts Here -->
         <section class="food-menu">
+            <div id="nameHeader" class="nameHeader">
+                <h1 id="nameHeaderText" class="nameHeaderText"></h1>
+            </div>
+
             <div class="container">
+
+                <div id="favCard" class="favCard">
+                </div>
+                
                 <div class="food-menu-box">
                     <div class="food-menu-img">
                         <img src="images/cocktail1.jpg"
@@ -48,7 +69,7 @@
                         <p class="food-detail">
                             50% de jus
                             d'orange, 25% de jus d'ananas, 25% de jus de
-                            cramberry
+                            cranberry
                         </p>
                         <br>
 
@@ -108,12 +129,12 @@
                     </div>
 
                     <div class="food-menu-desc">
-                        <h4>Cramberry Sunset</h4>
+                        <h4>cranberry Sunset</h4>
                         <p class="food-price"></p>
                         <p class="food-detail">
                             25% de jus
                             d'orange, 25% de jus d'ananas, 50% de jus de
-                            cramberry
+                            cranberry
                         </p>
                         <br>
 
@@ -165,9 +186,7 @@
                 </div>
 
                 <div class="clearfix"></div>
-
             </div>
-
         </section>
         <!-- fOOD Menu Section Ends Here -->
         <script src="index.js"></script>

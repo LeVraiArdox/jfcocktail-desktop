@@ -1,4 +1,32 @@
 let usedState = false;
+let isConnected = false;
+
+const ingredients = {
+  "Sunrise Splash":
+    "50% de jus d'orange, 25% de jus d'ananas, 25% de jus de cranberry",
+  "Tropical Breeze":
+    "Même quantité de jus d'ananas, jus d'orange et de jus de pomme",
+  "Apple Pine Delight":
+    "25% de jus d'orange, 25% de jus d'ananas puis 50% de jus de pomme",
+  "Cranberry Sunset":
+    "25% de jus d'orange, 25% de jus d'ananas, 50% de jus de cranberry",
+  "Island Orchid":
+    "Même quantité de jus d'ananas, jus de pomme et jus de cranberry",
+  "Tropical CranApple":
+    "Même quantité de jus d'ananas, jus de pomme et jus de cranberry",
+};
+
+const images = {
+  "Sunrise Splash": "../images/cocktail1.jpg",
+  "Tropical Breeze": "../images/cocktail2.jpg",
+  "Apple Pine Delight": "../images/cocktail3.jpg",
+  "Cranberry Sunset": "../images/cocktail4.png",
+  "Island Orchid": "../images/cocktail5.png",
+  "Tropical CranApple": "../images/cocktail6.png",
+};
+
+var popup = document.getElementById("loginPopup");
+popup.style.display = "none";
 
 document.addEventListener("DOMContentLoaded", function () {
   var buttons = document.querySelectorAll(".btn-primary");
@@ -9,32 +37,32 @@ document.addEventListener("DOMContentLoaded", function () {
         var info;
         switch (index) {
           case 0:
-            info = "1";
+            info = "Sunrise Splash";
             break;
           case 1:
-            info = "2";
+            info = "Tropical Breeze";
             break;
           case 2:
-            info = "3";
+            info = "Apple Pine Delight";
             break;
           case 3:
-            info = "4";
+            info = "Cranberry Sunset";
             break;
           case 4:
-            info = "5";
+            info = "Island Orchid";
             break;
           case 5:
-            info = "6";
+            info = "Tropical CranApple";
             break;
           default:
-            info = "7";
+            info = "None";
         }
 
         // Send the information to Node-RED using AJAX
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://localhost:1880/endpoint", true);
         xhr.setRequestHeader("Content-Type", "application/json");
-        alert("Commande envoyée: " + info);
+        alert("Commande envoyée.");
         usedState = true;
         xhr.onload = function () {
           if (xhr.status >= 200 && xhr.status < 300) {
@@ -55,10 +83,83 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         // Send the request with the JSON payload
-        xhr.send(JSON.stringify({ cocktail: info }));
+        xhr.send(JSON.stringify({ cocktail: info, user: "ardox" }));
       } else {
         alert("une commande est deja en cours");
       }
     });
   });
 });
+
+function toggleLogin() {
+  var popup = document.getElementById("loginPopup");
+  if (popup.style.display === "block") {
+    popup.style.display = "none";
+  } else {
+    popup.style.display = "block";
+  }
+}
+
+function submitLogin() {
+  var username = document.getElementById("username").value;
+  var password = document.getElementById("password").value;
+
+  // Create a JSON object with username and password
+  var credentials = {
+    user: username,
+    passwd: password,
+  };
+
+  // Make an HTTP POST request to your Node-RED server
+  fetch("http://localhost:1880/login-endpoint", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.data == "success") {
+        console.log(data);
+        alert("Login successful!");
+        toggleLogin();
+        isConnected = true;
+        showName(data.name, data.favdrink);
+      } else {
+        alert("Invalid username or password. Please try again.");
+        console.log(data);
+        isConnected = false;
+        showName(null);
+      }
+    });
+}
+
+function showName(name, favdrink) {
+  var text = document.getElementById("nameHeaderText");
+  if (name) text.innerText = "Bienvenue, " + name;
+  if (favdrink) {
+    var favcard = document.createElement("div");
+    favcard.innerHTML = `
+    <div class="food-menu-box";">
+        <div class="food-menu-img">
+            <img src="${images[favdrink]}"
+                alt=""
+                class="img-responsive img-curve">
+        </div>
+
+        <div class="food-menu-desc">
+            <h4 style="color: #ff6b81;">Favoris: ${favdrink}</h4>
+            <p class="food-price"></p>
+            <p class="food-detail">
+                ${ingredients[favdrink]}
+            </p>
+            <br>
+
+            <a href="#" class="btn btn-primary">Commander</a>
+        </div>`;
+    document.getElementById("favCard").appendChild(favcard);
+  }
+}
+
+showName(null);
