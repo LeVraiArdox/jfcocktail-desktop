@@ -1,6 +1,15 @@
 let usedState = false;
 let isConnected = false;
 
+const boissons = [
+  "Sunrise Splash",
+  "Tropical Breeze",
+  "Apple Pine Delight",
+  "Cranberry Sunset",
+  "Island Orchid",
+  "Tropical CranApple",
+];
+
 const ingredients = {
   "Sunrise Splash":
     "50% de jus d'orange, 25% de jus d'ananas, 25% de jus de cranberry",
@@ -160,6 +169,36 @@ function showName(name, favdrink) {
         </div>`;
     document.getElementById("favCard").appendChild(favcard);
   }
+
+  const random = Math.floor(Math.random() * boissons.length);
+  const recommended = boissons[random];
+  if (favdrink && name) {
+    var recocard = document.createElement("div");
+    recocard.innerHTML = `
+    <div class="food-menu-box";">
+        <div class="food-menu-img">
+            <img src="${images[recommended]}"
+                alt=""
+                class="img-responsive img-curve">
+        </div>
+
+        <div class="food-menu-desc">
+            <h4 style="color: #70cc81;">Recommandé: ${recommended}</h4>
+            <p class="food-price"></p>
+            <p class="food-detail">
+                ${ingredients[recommended]}
+            </p>
+            <br>
+
+            <a href="#" class="btn btn-primary">Commander</a>
+        </div>`;
+    document.getElementById("recoCard").appendChild(recocard);
+  }
+}
+
+function logout() {
+  showName(null, null);
+  isConnected = false;
 }
 
 showName(null);
