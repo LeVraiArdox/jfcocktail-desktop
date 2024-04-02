@@ -197,7 +197,14 @@ function showName(name, favdrink) {
 }
 
 function logout() {
-  showName(null, null);
+  var text = document.getElementById("nameHeaderText");
+  text.innerText = null;
+  var favcard = document.createElement("div");
+  favcard.innerHTML = null;
+  document.getElementById("favCard").replaceWith(favcard);
+  var recocard = document.createElement("div");
+  recocard.innerHTML = null
+  document.getElementById("recoCard").replaceWith(recocard)
   isConnected = false;
 }
 
